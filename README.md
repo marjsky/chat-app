@@ -48,7 +48,29 @@ cd [projectname]
 4. Start expo project
 
 ```
-npm start or expo start
+npx expo start
 ```
+
+### Install React Navigation library to navigate between screens
+
+1. Navigate to project folder and run
+
+```
+npm install react-navigation
+```
+
+2. Install necessary dependencies
+
+```
+npm install @react-navigation/native @react-navigation/stack
+expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+```
+### Set up Android Studio as Android Emulator
+
+1. Download Android Studio
+2. Make sure 'Android Virtual Device' is installed
+3. Create virtual device and click play to start
+4. Select 'Run app on Android' in Expo to run app on virtual device
+
 
 
