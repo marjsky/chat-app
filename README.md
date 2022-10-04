@@ -72,5 +72,12 @@ expo install react-native-reanimated react-native-gesture-handler react-native-s
 3. Create virtual device and click play to start
 4. Select 'Run app on Android' in Expo to run app on virtual device
 
+### Install React Native Gifted Chat 
+
+1. Install React Native Gifted Chat
+
+```
+npm install react-native-gifted-chat --save
+```
 
 
