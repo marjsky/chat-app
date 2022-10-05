@@ -17,12 +17,14 @@ export default class Start extends React.Component {
           >
             <Text style={styles.title}>Chat App</Text>
             <View style={styles.containerLogin}>
+            {/* user input name to display in chat */}
             <TextInput
               style={styles.textInputName}
               onChangeText={(name) => this.setState({ name })}
               value={this.state.name}
               placeholder='Your Name'
             />
+            {/* user choice color for chat background */}
             <View style={styles.colorChoiceBox}>
               <Text style={styles.colorChoiceText}>Choose Background Color:</Text>
               <View style={styles.colorChoice}>
@@ -44,6 +46,7 @@ export default class Start extends React.Component {
                 ></TouchableOpacity>
               </View>
             </View>
+            {/* user enter chat */}
             <Pressable
               style={styles.btnStart}
               title="Start Chatting"
