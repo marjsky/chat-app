@@ -6,7 +6,6 @@ import 'react-native-gesture-handler';
 const firebase = require('firebase');
 require('firebase/firestore');
 
-// https://github.com/wichofly/chat-app/commit/069064381d709bad8d6e1243a575caef2dac8ed9
 export default class Chat extends React.Component {
     //state initialization
     constructor() {
