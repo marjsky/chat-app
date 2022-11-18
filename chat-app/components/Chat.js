@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { View, KeyboardAvoidingView, Platform} from 'react-native';
+import React from 'react';
+import { View, Platform, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
-import 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from '@react-native-community/netinfo';
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
 // database
-const firebase = require('firebase');
-require('firebase/firestore');
+import firebase from "firebase";
+import 'firebase/firestore';
 
 export default class Chat extends React.Component {
     //state initialization
@@ -19,7 +20,10 @@ export default class Chat extends React.Component {
         user: {
           _id: '',
           name: '',
+          avatar: '',
         },
+        image: null,
+        location: null,
         isConnected: null, 
       };
 
@@ -54,6 +58,8 @@ export default class Chat extends React.Component {
             _id: data.user._id,
             name: data.user.name,
           },
+          image: data.image || null,
+          location: data.location || null,
         });
       });
 
@@ -108,11 +114,36 @@ export default class Chat extends React.Component {
             isConnected: true,
           });
           console.log('online');
+
+                  // Reference to load messages via Firebase
+        this.referenceChatMessages = firebase
+          .firestore()
+          .collection('messages');
+
+        // Authenticating users anonymously
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+          if (!user) {
+            firebase.auth().signInAnonymously();
+          }
+          this.setState({
+            uid: user.uid,
+            messages: [],
+            user: {
+              _id: user.uid,
+              name: name,
+            },
+          });
+          this.unsubscribe = this.referenceChatMessages
+            .orderBy("createdAt", "desc")
+            .onSnapshot(this.onCollectionUpdate);
+        });
         } else {
           this.setState({
             isConnected: false,
           });
           console.log('offline');
+
+          this.getMessages(); //or messages()
         }
       });
 
@@ -153,13 +184,16 @@ export default class Chat extends React.Component {
     }
 
     // to store messages in collection database
-    addMessages = (message) => {
+    addMessages = () => {
+      const message = this.state.messages[0];
       this.referenceChatMessages.add({
         uid: this.state.uid,
         _id: message._id,
-        text: message.text,
+        text: message.text || '',
         createdAt: message.createdAt,
         user: message.user,
+        image: message.image || null,
+        location: message.location || null,
       });
     };
 
@@ -177,7 +211,9 @@ export default class Chat extends React.Component {
           }
           
           // storing the messages
+          this.addMessages();
           this.saveMessages();
+          this.deleteMessages();
         }
       );
     }
@@ -208,27 +244,56 @@ export default class Chat extends React.Component {
       }
     }
 
+    // function deal with circle button
+    renderCustomActions = (props) => {
+      return <CustomActions {...props} />;
+    };
+
+    renderCustomView(props) {
+      const { currentMessage } = props;
+      if (currentMessage.location) {
+        return (
+          <MapView
+            style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+            region={{
+              latitude: currentMessage.location.latitude,
+              longitude: currentMessage.location.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+        );
+      }
+      return null;
+    }
+
     //rendering chat interface
     render() {
   
-      const { color, name } = this.props.route.params;
+      const { color } = this.props.route.params;
 
       return (
-        <View style={[{backgroundColor: color},{ flex: 1 }]}>
-          <GiftedChat
-            renderBubble={this.renderBubble.bind(this)}
-            renderInputToolbar={this.renderInputToolbar.bind(this)}
-            messages={this.state.messages}
-            onSend={(messages) => this.onSend(messages)}
-            user={{
-              _id: this.state.user._id,
-              name: name,
-            }}
-          />
-          {Platform.OS === 'android' ? (
-            <KeyboardAvoidingView behavior='height' />
-          ) : null}
-        </View>
+      
+          <View style={[{backgroundColor: color},{ flex: 1 }]}>
+            <GiftedChat
+              renderActions={this.renderCustomActions}
+              renderCustomView={this.renderCustomView}
+              renderBubble={this.renderBubble.bind(this)}
+              renderInputToolbar={this.renderInputToolbar.bind(this)}
+              messages={this.state.messages}
+              onSend={(messages) => this.onSend(messages)}
+              user={{
+                _id: this.state.user._id,
+                name: this.state.user.name,
+                
+              }}
+              
+            />
+            {Platform.OS === 'android' ? (
+              <KeyboardAvoidingView behavior='height' />
+            ) : null}
+          </View>
+        
       );
     };
   };

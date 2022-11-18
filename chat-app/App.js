@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-// import { View, Text, Button } from 'react-native';
+
+// import screens
 import Start from './components/Start';
 import Chat from './components/Chat';
 import 'react-native-gesture-handler';
+
+// import react navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
+// create navigator
 const Stack = createStackNavigator();
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { text: '' };
-  }
+export default class App extends Component {
+  
   render() {
     return (
       <NavigationContainer>

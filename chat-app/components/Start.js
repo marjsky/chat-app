@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, Pressable, TextInput, StyleSheet, ImageBackground } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Pressable, TextInput, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+
 import BackgroundImage from '../assets/bimg.png';
-export default class Start extends React.Component {
+export default class Start extends Component {
   constructor(props) {
     super(props);
     this.state = { name: '', color: ''};
