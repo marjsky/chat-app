@@ -9,6 +9,7 @@ import MapView from 'react-native-maps';
 // database
 import firebase from "firebase";
 import 'firebase/firestore';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 export default class Chat extends React.Component {
     //state initialization
@@ -273,10 +274,10 @@ export default class Chat extends React.Component {
       const { color } = this.props.route.params;
 
       return (
-      
+        <ActionSheetProvider>
           <View style={[{backgroundColor: color},{ flex: 1 }]}>
             <GiftedChat
-              renderActions={this.renderCustomActions}
+              renderActions={this.renderCustomActions.bind(this)}
               renderCustomView={this.renderCustomView}
               renderBubble={this.renderBubble.bind(this)}
               renderInputToolbar={this.renderInputToolbar.bind(this)}
@@ -293,7 +294,7 @@ export default class Chat extends React.Component {
               <KeyboardAvoidingView behavior='height' />
             ) : null}
           </View>
-        
+        </ActionSheetProvider>
       );
     };
   };
