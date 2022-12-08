@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, Text } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from '@react-native-community/netinfo';
 import CustomActions from './CustomActions';
 import MapView from 'react-native-maps';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 // database
 import firebase from "firebase";
 import 'firebase/firestore';
-import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+
 
 export default class Chat extends React.Component {
     //state initialization
@@ -21,7 +22,7 @@ export default class Chat extends React.Component {
         user: {
           _id: '',
           name: '',
-          avatar: '',
+          avatar: "https://placeimg.com/140/140/any",
         },
         image: null,
         location: null,
@@ -30,12 +31,12 @@ export default class Chat extends React.Component {
 
       if (!firebase.apps.length) {
         firebase.initializeApp({
-          apiKey: "AIzaSyA8Zmb_umm2qm-8KRgaXB8EWPx_QlT9DP4",
-          authDomain: "chat-app-2-be68e.firebaseapp.com",
-          projectId: "chat-app-2-be68e",
-          storageBucket: "chat-app-2-be68e.appspot.com",
-          messagingSenderId: "312065980847",
-          appId: "1:312065980847:web:c1c7f068f470006f9ed75a",
+          apiKey: "AIzaSyDn2GUB62pUXx6CqBJfRC4Lt9etppZADTQ",
+          authDomain: "chat-final-d9a64.firebaseapp.com",
+          projectId: "chat-final-d9a64",
+          storageBucket: "chat-final-d9a64.appspot.com",
+          messagingSenderId: "924082935689",
+          appId: "1:924082935689:web:ef364e75779174635fb358"
         });
       }
 
@@ -58,6 +59,7 @@ export default class Chat extends React.Component {
           user: {
             _id: data.user._id,
             name: data.user.name,
+            avatar: data.user.avatar || '',
           },
           image: data.image || null,
           location: data.location || null,
@@ -132,7 +134,9 @@ export default class Chat extends React.Component {
             user: {
               _id: user.uid,
               name: name,
+              //avatar: "https://placeimg.com/140/140/any",
             },
+            loggedInText: '',
           });
           this.unsubscribe = this.referenceChatMessages
             .orderBy("createdAt", "desc")
@@ -207,14 +211,14 @@ export default class Chat extends React.Component {
       }),
         () => {
           // call addMessage with last message in message state
-          if (this.state.isConnected === true) {
-            this.addMessages(this.state.messages[0]);
-          }
+          // if (this.state.isConnected === true) {
+          //   this.addMessages(this.state.messages[0]);
+          // }
           
           // storing the messages
           this.addMessages();
           this.saveMessages();
-          this.deleteMessages();
+          //this.deleteMessages();
         }
       );
     }
@@ -226,7 +230,10 @@ export default class Chat extends React.Component {
           {...props}
           wrapperStyle={{
             right: {
-              backgroundColor: 'blue',
+              backgroundColor: '#000',
+            },
+            left: {
+              backgroundColor: '#fff',
             },
           }}
         />
@@ -276,19 +283,18 @@ export default class Chat extends React.Component {
       return (
         <ActionSheetProvider>
           <View style={[{backgroundColor: color},{ flex: 1 }]}>
+            <Text>{this.state.loggedInText}</Text>
             <GiftedChat
               renderActions={this.renderCustomActions.bind(this)}
-              renderCustomView={this.renderCustomView}
+              renderCustomView={this.renderCustomView.bind(this)}
               renderBubble={this.renderBubble.bind(this)}
               renderInputToolbar={this.renderInputToolbar.bind(this)}
               messages={this.state.messages}
               onSend={(messages) => this.onSend(messages)}
               user={{
                 _id: this.state.user._id,
-                name: this.state.user.name,
-                
+                avatar: 'https://placeimg.com/140/140/any',      
               }}
-              
             />
             {Platform.OS === 'android' ? (
               <KeyboardAvoidingView behavior='height' />

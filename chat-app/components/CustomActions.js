@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import PropTypes from 'prop-types';
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
@@ -8,8 +7,7 @@ import { connectActionSheet } from '@expo/react-native-action-sheet';
 const firebase = require('firebase');
 require('firebase/firestore');
 
-class CustomActions extends Component {
-
+export default class CustomActions extends Component {
 
   // Allow user choose image from native library
   imagePicker = async () => {
@@ -29,7 +27,6 @@ class CustomActions extends Component {
       console.log(error.message);
     }
   };
-
 
   // Allow user took picture from camera
   takePhoto = async () => {
@@ -53,11 +50,12 @@ class CustomActions extends Component {
 
   // Obtain user location by using GPS
   getLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
     try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === 'granted') {
-        let result = await Location.getCurrentPositionAsync({
-        }).catch((error) => console.log(error));
+        const result = await Location.getCurrentPositionAsync({}).catch(
+          (error) => console.log(error)
+        );
         const longitude = JSON.stringify(result.coords.longitude);
         const latitude = JSON.stringify(result.coords.latitude);
         if (result) {
@@ -115,7 +113,7 @@ class CustomActions extends Component {
         switch (buttonIndex) {
           case 0:
             console.log('user wants to pick an image');
-            return this.pickImage();
+            return this.imagePicker();
           case 1:
             console.log('user wants to take a photo');
             return this.takePhoto();
@@ -135,7 +133,7 @@ class CustomActions extends Component {
         accessibilityLabel='More options'
         accessibilityHint='Send an image or your geolocation.'
         style={[styles.container]} 
-        onPress={this.onActionPress}
+        onPress={this.onActionPress.bind(this)}
       >
         <View style={[styles.wrapper, this.props.wrapperStyle]}>
          <Text style={[styles.iconText, this.props.iconTextStyle]}>+</Text>
@@ -171,6 +169,5 @@ CustomActions.contextTypes = {
   actionSheet: PropTypes.func,
 };
 
-const ConnectedApp = connectActionSheet(CustomActions);
+CustomActions = connectActionSheet(CustomActions);
 
-export default ConnectedApp;
