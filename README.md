@@ -1,4 +1,4 @@
-# chat-app
+# Native React chat-app
  
 ## Objective
 
@@ -62,8 +62,29 @@ npm install react-navigation
 2. Install necessary dependencies
 
 ```
-npm install @react-navigation/native @react-navigation/stack
-expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+"@expo/react-native-action-sheet": "^3.14.0",
+"@expo/webpack-config": "^0.17.0",
+"@react-native-async-storage/async-storage": "^1.17.10",
+"@react-native-community/masked-view": "^0.1.11",
+"@react-native-community/netinfo": "9.3.0",
+"@react-navigation/native": "^6.0.13",
+"@react-navigation/stack": "^6.3.1",
+"expo": "~46.0.13",
+"expo-status-bar": "~1.4.0",
+"firebase": "^8.0.1",
+"react": "18.0.0",
+"react-native": "0.69.6",
+"react-native-gesture-handler": "~2.5.0",
+"react-native-gifted-chat": "^1.0.4",
+"react-native-paper": "^4.12.5",
+"react-native-reanimated": "~2.9.1",
+"react-native-safe-area-context": "4.3.1",
+"react-native-screens": "~3.15.0",
+"react-navigation": "^4.4.4",
+"react-native-maps": "0.31.1",
+"expo-permissions": "~13.2.0",
+"expo-image-picker": "~13.3.1",
+"expo-location": "~14.3.0"
 ```
 ### Set up Android Studio as Android Emulator
 
@@ -72,12 +93,19 @@ expo install react-native-reanimated react-native-gesture-handler react-native-s
 3. Create virtual device and click play to start
 4. Select 'Run app on Android' in Expo to run app on virtual device
 
-### Install React Native Gifted Chat 
-
-1. Install React Native Gifted Chat
-
-```
-npm install react-native-gifted-chat --save
-```
+### Database configuration:
+- Https://firebase.google.com/ and crete a new Google account.
+- Go to Firebase console to create project.
+- Click on Develop on left in project's dashboard, then create database and follow steps, seleted test mode.
+- Click the button icon (</>) under Project Settings on left.
+- Choose name for project, click register and copy the code of configuration to components/Chat.js as known: 
+  apiKey: '...',
+  authDomain: '...',
+  projectId: '...',
+  storageBucket: '...',
+  messagingSenderId: '...',
+  appId: '...',
+- Click on Authentication on left, to enable anonymous on.
+- Click on Storage on left, then Rules on tab, to change "allow read, write: if false;" to "allow read, write: if true;".
 
 
