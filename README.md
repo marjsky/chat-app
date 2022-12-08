@@ -108,4 +108,4 @@ npm install react-navigation
 - Click on Authentication on left, to enable anonymous on.
 - Click on Storage on left, then Rules on tab, to change "allow read, write: if false;" to "allow read, write: if true;".
 
-![Home page](/chat-app/chat-app/assets/Home_page1.png)
+![Home page](./screenshot/Home_page1.png)
